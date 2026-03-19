@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Netanel Pam — Software Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:           #080B12;
+      --bg-card:      #0D1220;
+      --border:       #1A2236;
+      --border-b:     #263048;
+      --cyan:         #00D4FF;
+      --cyan-dim:     rgba(0,212,255,0.10);
+      --cyan-glow:    rgba(0,212,255,0.35);
+      --text:         #E8EAF0;
+      --text-dim:     #D8DBE4;
+      --text-muted:   #AAB3C2;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border-b); }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.4rem 4rem;
+      transition: background .3s, border-color .3s;
+      border-bottom: 1px solid transparent;
+    }
+    nav.scrolled {
+      background: rgba(8,11,18,.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-color: var(--border);
+    }
+    .nav-logo {
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.15rem;
+      color: var(--cyan); text-decoration: none; letter-spacing: .06em;
+    }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      font-family: 'IBM Plex Mono', monospace; font-size: .72rem;
+      color: var(--text-muted); text-decoration: none;
+      letter-spacing: .12em; text-transform: uppercase; transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--cyan); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh; display: flex; flex-direction: column;
+      justify-content: center; padding: 0 4rem;
+      position: relative; overflow: hidden;
+    }
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,212,255,.022) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,212,255,.022) 1px, transparent 1px);
+      background-size: 72px 72px;
+    }
+    .hero-glow {
+      position: absolute; top: 15%; right: 5%;
+      width: 680px; height: 680px;
+      background: radial-gradient(ellipse, rgba(0,212,255,.055) 0%, transparent 68%);
+      pointer-events: none;
+    }
+    .hero-content { position: relative; max-width: 920px; }
+    .hero-tag {
+      font-family: 'IBM Plex Mono', monospace; font-size: .75rem;
+      color: var(--cyan); letter-spacing: .18em;
+      margin-bottom: 1.6rem;
+      display: flex; align-items: center; gap: .8rem;
+    }
+    .hero-tag::before {
+      content: ''; display: block; width: 34px; height: 1px; background: var(--cyan);
+    }
+    h1 {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: clamp(3.8rem, 10vw, 8.5rem);
+      line-height: .88; letter-spacing: -.025em;
+      color: var(--text); margin-bottom: 1.6rem;
+    }
+    h1 .accent { color: var(--cyan); }
+    .hero-sub {
+      font-family: 'IBM Plex Mono', monospace; font-size: .95rem;
+      color: var(--text-muted); margin-bottom: 2.8rem; line-height: 1.8;
+    }
+    .cursor {
+      display: inline-block; width: 2px; height: .95em;
+      background: var(--cyan); vertical-align: middle; margin-left: 2px;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+    .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .7rem 1.6rem;
+      font-family: 'IBM Plex Mono', monospace; font-size: .78rem;
+      letter-spacing: .1em; text-decoration: none;
+      border-radius: 2px; transition: all .22s; cursor: pointer;
+      border: none;
+    }
+    .btn-primary { background: var(--cyan); color: var(--bg); font-weight: 500; }
+    .btn-primary:hover { background: #fff; box-shadow: 0 0 28px var(--cyan-glow); }
+    .btn-outline { border: 1px solid var(--border-b); color: var(--text-dim); }
+    .btn-outline:hover { border-color: var(--cyan); color: var(--cyan); }
+
+    .scroll-hint {
+      position: absolute; bottom: 2.2rem; left: 4rem;
+      display: flex; align-items: center; gap: .8rem;
+      font-family: 'IBM Plex Mono', monospace; font-size: .68rem;
+      color: var(--text-muted); letter-spacing: .12em;
+    }
+    .scroll-line {
+      width: 44px; height: 1px; background: var(--border-b);
+      position: relative; overflow: hidden;
+    }
+    .scroll-line::after {
+      content: ''; position: absolute; top: 0; left: -100%;
+      width: 100%; height: 100%; background: var(--cyan);
+      animation: slide 2.2s ease-in-out infinite;
+    }
+    @keyframes slide { 0%{left:-100%} 50%{left:0} 100%{left:100%} }
+
+    /* ── SECTIONS ── */
+    section {
+      padding: 7rem 4rem; max-width: 1120px; margin: 0 auto;
+    }
+    .s-head {
+      display: flex; align-items: baseline; gap: 1.4rem; margin-bottom: 4rem;
+    }
+    .s-num {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .72rem; color: var(--cyan); letter-spacing: .1em;
+    }
+    .s-title {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 2.2rem; letter-spacing: -.02em;
+    }
+    .s-line { flex: 1; height: 1px; background: var(--border); }
+
+    /* ── ABOUT ── */
+    .about-grid {
+      display: grid; grid-template-columns: 1.1fr .9fr; gap: 5rem; align-items: start;
+    }
+    .about-text p { color: var(--text-dim); margin-bottom: 1.2rem; font-size: .97rem; line-height: 1.85; }
+    .about-text strong { color: var(--text); font-weight: 500; }
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    .stat {
+      border: 1px solid var(--border); border-radius: 3px;
+      padding: 1.5rem; background: var(--bg-card); transition: border-color .2s;
+    }
+    .stat:hover { border-color: var(--cyan); }
+    .stat-n {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 2.6rem; color: var(--cyan); line-height: 1; margin-bottom: .4rem;
+    }
+    .stat-l {
+      font-family: 'IBM Plex Mono', monospace; font-size: .68rem;
+      color: var(--text-muted); letter-spacing: .08em; text-transform: uppercase;
+    }
+
+    /* ── PROJECTS ── */
+    .proj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; }
+
+    .card {
+      border: 1px solid var(--border); border-radius: 3px;
+      padding: 2rem; background: var(--bg-card);
+      transition: border-color .28s, transform .28s;
+      position: relative; overflow: hidden;
+    }
+    .card::after {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--cyan), transparent);
+      opacity: 0; transition: opacity .28s;
+    }
+    .card:hover { border-color: var(--border-b); transform: translateY(-5px); }
+    .card:hover::after { opacity: 1; }
+    .card.featured {
+      grid-column: 1 / -1;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start;
+    }
+
+    .badge {
+      display: inline-block;
+      font-family: 'IBM Plex Mono', monospace; font-size: .63rem;
+      letter-spacing: .12em; text-transform: uppercase;
+      padding: .22rem .6rem; border-radius: 2px; margin-bottom: .9rem;
+    }
+    .badge-live { background: rgba(0,212,255,.1); color: var(--cyan); border: 1px solid rgba(0,212,255,.3); }
+    .badge-tag  { background: rgba(255,255,255,.04); color: var(--text-muted); border: 1px solid var(--border); }
+
+    .proj-name {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 1.2rem; margin-bottom: .65rem;
+    }
+    .proj-desc { font-size: .88rem; color: var(--text-muted); line-height: 1.75; margin-bottom: 1.4rem; }
+
+    .tags { display: flex; flex-wrap: wrap; gap: .45rem; margin-bottom: 1.4rem; }
+    .tag {
+      font-family: 'IBM Plex Mono', monospace; font-size: .68rem;
+      padding: .18rem .55rem; border-radius: 2px;
+      background: rgba(255,255,255,.04); border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+
+    .proj-link {
+      display: inline-flex; align-items: center; gap: .4rem;
+      font-family: 'IBM Plex Mono', monospace; font-size: .75rem;
+      color: var(--cyan); text-decoration: none; transition: gap .2s;
+    }
+    .proj-link:hover { gap: .75rem; }
+
+    .featured-note {
+      font-family: 'IBM Plex Mono', monospace; font-size: .75rem;
+      color: var(--text-muted); line-height: 1.8; margin-top: 1rem;
+      padding: 1rem 1.2rem;
+      border: 1px solid var(--border); border-radius: 3px;
+      background: rgba(0,212,255,.03);
+    }
+    .featured-note strong { color: var(--text-dim); }
+
+    /* ── SKILLS ── */
+    .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.2rem; }
+    .sg-title {
+      font-family: 'IBM Plex Mono', monospace; font-size: .68rem;
+      color: var(--cyan); letter-spacing: .16em; text-transform: uppercase;
+      margin-bottom: .9rem; padding-bottom: .7rem; border-bottom: 1px solid var(--border);
+    }
+    .skill-list { display: flex; flex-direction: column; gap: .45rem; }
+    .sk {
+      display: flex; align-items: center; gap: .7rem;
+      padding: .55rem .9rem; border-radius: 3px;
+      border: 1px solid var(--border); background: var(--bg-card);
+      font-size: .85rem; color: var(--text-dim); transition: all .2s;
+    }
+    .sk:hover { border-color: var(--cyan); color: var(--text); background: var(--cyan-dim); }
+    .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--cyan); opacity: .55; flex-shrink: 0; }
+
+    /* ── EXPERIENCE ── */
+    .timeline { padding-left: 2rem; position: relative; }
+    .timeline::before {
+      content: ''; position: absolute; left: 0; top: .5rem; bottom: 0;
+      width: 1px; background: var(--border);
+    }
+    .tl-item { position: relative; padding-bottom: 3.5rem; }
+    .tl-item:last-child { padding-bottom: 0; }
+    .tl-dot {
+      position: absolute; left: -2.4rem; top: .35rem;
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--bg); border: 2px solid var(--cyan);
+    }
+    .tl-date {
+      font-family: 'IBM Plex Mono', monospace; font-size: .68rem;
+      color: var(--cyan); letter-spacing: .1em; margin-bottom: .45rem;
+    }
+    .tl-company {
+      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.1rem; margin-bottom: .2rem;
+    }
+    .tl-role {
+      font-family: 'IBM Plex Mono', monospace; font-size: .78rem;
+      color: var(--text-muted); margin-bottom: .9rem;
+    }
+    .tl-desc { font-size: .88rem; color: var(--text-muted); line-height: 1.75; }
+    .tl-desc li { margin-bottom: .35rem; padding-left: 1rem; position: relative; }
+    .tl-desc li::before { content: '›'; position: absolute; left: 0; color: var(--cyan); }
+
+    /* ── CONTACT ── */
+    #contact {
+      text-align: center; padding: 7rem 4rem; max-width: 1120px; margin: 0 auto;
+    }
+    .ct-label {
+      font-family: 'IBM Plex Mono', monospace; font-size: .72rem;
+      color: var(--cyan); letter-spacing: .22em; text-transform: uppercase; margin-bottom: 1.4rem;
+    }
+    .ct-title {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: clamp(2.2rem, 5vw, 4rem); margin-bottom: .9rem;
+    }
+    .ct-sub {
+      color: var(--text-muted); font-size: .93rem; margin-bottom: 3rem;
+      max-width: 400px; margin-left: auto; margin-right: auto;
+    }
+    .ct-links { display: flex; justify-content: center; gap: 1.2rem; flex-wrap: wrap; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border); padding: 1.8rem 4rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    footer span {
+      font-family: 'IBM Plex Mono', monospace; font-size: .68rem; color: var(--text-muted);
+    }
+
+    /* ── ANIMATION ── */
+    .fade-up { opacity: 0; transform: translateY(28px); transition: opacity .65s ease, transform .65s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { display: none; }
+      section, #contact { padding: 4.5rem 1.5rem; }
+      #hero { padding: 0 1.5rem; }
+      .about-grid, .card.featured, .skills-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .proj-grid { grid-template-columns: 1fr; }
+      .card.featured { display: flex; flex-direction: column; }
+      footer { flex-direction: column; gap: .6rem; text-align: center; }
+      .scroll-hint { left: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#hero" class="nav-logo">NP</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Available for opportunities</div>
+    <h1>NETANEL<br><span class="accent">PAM</span></h1>
+    <p class="hero-sub">
+      <span id="typed"></span><span class="cursor"></span>
+    </p>
+    <div class="hero-ctas">
+      <a href="https://github.com/pamnati592" target="_blank" class="btn btn-primary">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub
+      </a>
+      <a href="mailto:pamnati592@gmail.com" class="btn btn-outline">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        Get in Touch
+      </a>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    scroll
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="s-head fade-up">
+    <span class="s-num">01.</span>
+    <h2 class="s-title">About</h2>
+    <div class="s-line"></div>
+  </div>
+  <div class="about-grid">
+    <div class="about-text fade-up">
+      <p>I'm a <strong>Computer Science student</strong> at The Academic College of Tel Aviv–Yafo, building real software that solves real problems — not just for assignments, but for teams that depend on it daily.</p>
+      <p>Currently working as a <strong>NOC & Technical Support Engineer at Keshet Digital</strong>, where I designed and shipped two AI-powered internal tools: a RAG-based support chatbot and a Slack bot for content editors. Both are actively in production.</p>
+      <p>My background spans <strong>backend development, DevOps, AI/LLM integration, and QA</strong> — giving me a full-spectrum view of how software gets built, tested, and kept alive. I thrive at the intersection of engineering and operations.</p>
+      <p>Native in Hebrew and Russian, fluent in English.</p>
+    </div>
+    <div class="stats-grid fade-up">
+      <div class="stat">
+        <div class="stat-n">2+</div>
+        <div class="stat-l">Years Experience</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n">2</div>
+        <div class="stat-l">AI Tools in Production</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n">10+</div>
+        <div class="stat-l">Projects Built</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n">3</div>
+        <div class="stat-l">Languages Spoken</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="s-head fade-up">
+    <span class="s-num">02.</span>
+    <h2 class="s-title">Projects</h2>
+    <div class="s-line"></div>
+  </div>
+  <div class="proj-grid">
+
+    <!-- Featured -->
+    <div class="card featured fade-up">
+      <div>
+        <span class="badge badge-live">⬤ Live in Production</span>
+        <div class="proj-name">AI Technical Support Bot</div>
+        <p class="proj-desc">RAG-based internal chatbot deployed at Keshet Digital. Pulls from the company knowledge base using vector search, streams answers token-by-token, analyzes error screenshots, generates shift summaries, and tracks incidents automatically.</p>
+        <a href="https://github.com/pamnati592/AI_technical_support_bot" target="_blank" class="proj-link">View on GitHub →</a>
+      </div>
+      <div>
+        <div class="tags">
+          <span class="tag">Python</span>
+          <span class="tag">FastAPI</span>
+          <span class="tag">Google Gemini</span>
+          <span class="tag">ChromaDB</span>
+          <span class="tag">SSE Streaming</span>
+          <span class="tag">RAG</span>
+          <span class="tag">BookStack</span>
+        </div>
+        <div class="featured-note">
+          Also built an <strong>AI Slack Bot for content editors</strong> at Keshet Digital — same RAG architecture, separate deployment, in active daily use by the editorial team.
+        </div>
+      </div>
+    </div>
+
+    <!-- K8s -->
+    <div class="card fade-up">
+      <span class="badge badge-tag">DevOps</span>
+      <div class="proj-name">Kubernetes Todo App</div>
+      <p class="proj-desc">Full-stack app deployed on Kubernetes using Helm. Vue.js frontend, Node.js REST API, MariaDB as a StatefulSet. Published as a reusable Helm chart to GitHub Container Registry.</p>
+      <div class="tags">
+        <span class="tag">Vue.js</span>
+        <span class="tag">Node.js</span>
+        <span class="tag">MariaDB</span>
+        <span class="tag">Kubernetes</span>
+        <span class="tag">Helm</span>
+        <span class="tag">GHCR</span>
+      </div>
+      <a href="https://github.com/pamnati592/k8s-finalProject" target="_blank" class="proj-link">View on GitHub →</a>
+    </div>
+
+    <!-- Football -->
+    <div class="card fade-up">
+      <span class="badge badge-tag">Full Stack</span>
+      <div class="proj-name">Football Analytics</div>
+      <p class="proj-desc">Full-stack analytics app with a React frontend, FastAPI backend, and SQLite database. Designed end-to-end in Figma before implementation.</p>
+      <div class="tags">
+        <span class="tag">React</span>
+        <span class="tag">FastAPI</span>
+        <span class="tag">Python</span>
+        <span class="tag">SQLite</span>
+        <span class="tag">Figma</span>
+      </div>
+    </div>
+
+    <!-- Donkey Kong -->
+    <div class="card fade-up">
+      <span class="badge badge-tag">C++ / OOP</span>
+      <div class="proj-name">Donkey Kong (C++)</div>
+      <p class="proj-desc">Console arcade game in pure C++. Designed around inheritance hierarchies, polymorphism, and a modular class structure — no engine, no shortcuts.</p>
+      <div class="tags">
+        <span class="tag">C++</span>
+        <span class="tag">OOP</span>
+        <span class="tag">Polymorphism</span>
+        <span class="tag">Console</span>
+      </div>
+      <a href="https://github.com/pamnati592/Donkey-Kong-Game-CPP" target="_blank" class="proj-link">View on GitHub →</a>
+    </div>
+
+    <!-- Unity -->
+    <div class="card fade-up">
+      <span class="badge badge-tag">Game Dev</span>
+      <div class="proj-name">Unity Games</div>
+      <p class="proj-desc">Donkey Kong and Flappy Bird clones built in Unity with C#. Focus on game physics, component architecture, and OOP design patterns.</p>
+      <div class="tags">
+        <span class="tag">C#</span>
+        <span class="tag">Unity</span>
+        <span class="tag">Game Physics</span>
+        <span class="tag">OOP</span>
+      </div>
+      <a href="https://github.com/pamnati592/Donkey-kong-Unity" target="_blank" class="proj-link">View on GitHub →</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="s-head fade-up">
+    <span class="s-num">03.</span>
+    <h2 class="s-title">Skills</h2>
+    <div class="s-line"></div>
+  </div>
+  <div class="skills-grid fade-up">
+    <div>
+      <div class="sg-title">Languages</div>
+      <div class="skill-list">
+        <div class="sk"><span class="dot"></span>Python</div>
+        <div class="sk"><span class="dot"></span>C#</div>
+        <div class="sk"><span class="dot"></span>C++</div>
+        <div class="sk"><span class="dot"></span>C</div>
+        <div class="sk"><span class="dot"></span>JavaScript</div>
+        <div class="sk"><span class="dot"></span>SQL</div>
+      </div>
+    </div>
+    <div>
+      <div class="sg-title">Backend & Frontend</div>
+      <div class="skill-list">
+        <div class="sk"><span class="dot"></span>FastAPI</div>
+        <div class="sk"><span class="dot"></span>Node.js / Express</div>
+        <div class="sk"><span class="dot"></span>REST APIs</div>
+        <div class="sk"><span class="dot"></span>React</div>
+        <div class="sk"><span class="dot"></span>Vue.js</div>
+        <div class="sk"><span class="dot"></span>Prisma ORM</div>
+      </div>
+    </div>
+    <div>
+      <div class="sg-title">DevOps & Cloud</div>
+      <div class="skill-list">
+        <div class="sk"><span class="dot"></span>Docker</div>
+        <div class="sk"><span class="dot"></span>Kubernetes</div>
+        <div class="sk"><span class="dot"></span>Helm</div>
+        <div class="sk"><span class="dot"></span>Git / GitHub</div>
+        <div class="sk"><span class="dot"></span>Linux / Bash</div>
+      </div>
+    </div>
+    <div>
+      <div class="sg-title">AI & LLMs</div>
+      <div class="skill-list">
+        <div class="sk"><span class="dot"></span>RAG Architecture</div>
+        <div class="sk"><span class="dot"></span>Google Gemini</div>
+        <div class="sk"><span class="dot"></span>GPT-4o</div>
+        <div class="sk"><span class="dot"></span>ChromaDB</div>
+        <div class="sk"><span class="dot"></span>Prompt Engineering</div>
+      </div>
+    </div>
+    <div>
+      <div class="sg-title">AI Tooling</div>
+      <div class="skill-list">
+        <div class="sk"><span class="dot"></span>Claude Code</div>
+        <div class="sk"><span class="dot"></span>Cursor</div>
+        <div class="sk"><span class="dot"></span>GitHub Copilot</div>
+      </div>
+    </div>
+    <div>
+      <div class="sg-title">Tools & Diagnostics</div>
+      <div class="skill-list">
+        <div class="sk"><span class="dot"></span>Postman</div>
+        <div class="sk"><span class="dot"></span>JIRA</div>
+        <div class="sk"><span class="dot"></span>Wireshark</div>
+        <div class="sk"><span class="dot"></span>Chrome DevTools</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="s-head fade-up">
+    <span class="s-num">04.</span>
+    <h2 class="s-title">Experience</h2>
+    <div class="s-line"></div>
+  </div>
+  <div class="timeline">
+    <div class="tl-item fade-up">
+      <div class="tl-dot"></div>
+      <div class="tl-date">2025 — PRESENT</div>
+      <div class="tl-company">Keshet Digital</div>
+      <div class="tl-role">NOC & Technical Support Engineer</div>
+      <ul class="tl-desc">
+        <li>Designed and deployed an AI-powered RAG chatbot (Gemini, ChromaDB, FastAPI) — replaced manual knowledge retrieval, in active production use</li>
+        <li>Built and shipped a Slack Bot for the editorial team, automating content workflows end-to-end</li>
+        <li>Monitor production servers (Linux & Windows), perform root cause analysis, and drive stability improvements with development teams</li>
+      </ul>
+    </div>
+    <div class="tl-item fade-up">
+      <div class="tl-dot"></div>
+      <div class="tl-date">2022 — 2023</div>
+      <div class="tl-company">Maytronics</div>
+      <div class="tl-role">QA Engineer</div>
+      <ul class="tl-desc">
+        <li>Regression, Sanity, and Feature testing across product release cycles</li>
+        <li>Wrote STD & STR documentation; tracked bugs through full lifecycle in JIRA</li>
+        <li>Collaborated with developers and product managers in Agile sprints</li>
+      </ul>
+    </div>
+    <div class="tl-item fade-up">
+      <div class="tl-dot"></div>
+      <div class="tl-date">2023 — PRESENT</div>
+      <div class="tl-company">The Academic College of Tel Aviv–Yafo</div>
+      <div class="tl-role">B.Sc. Computer Science</div>
+      <ul class="tl-desc">
+        <li>Data Structures, Algorithms, OOP, Operating Systems, Software Engineering</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="ct-label fade-up">What's Next?</div>
+  <h2 class="ct-title fade-up">Let's Build Something.</h2>
+  <p class="ct-sub fade-up">Open to developer roles, interesting projects, and anything where I can make a real impact.</p>
+  <div class="ct-links fade-up">
+    <a href="mailto:pamnati592@gmail.com" class="btn btn-primary">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+      pamnati592@gmail.com
+    </a>
+    <a href="https://github.com/pamnati592" target="_blank" class="btn btn-outline">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+      GitHub
+    </a>
+  </div>
+</section>
+
+<footer>
+  <span>Netanel Pam © 2026</span>
+  <span>Built with HTML · CSS · JS</span>
+</footer>
+
+<script>
+  // Nav scroll
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 60));
+
+  // Typing effect
+  const phrases = ['Software Developer.', 'CS Student.', 'AI Builder.', 'Backend Engineer.'];
+  let pi = 0, ci = 0, del = false;
+  const el = document.getElementById('typed');
+  function tick() {
+    const p = phrases[pi];
+    if (!del) {
+      el.textContent = p.slice(0, ++ci);
+      if (ci === p.length) { del = true; setTimeout(tick, 1800); return; }
+    } else {
+      el.textContent = p.slice(0, --ci);
+      if (ci === 0) { del = false; pi = (pi + 1) % phrases.length; }
+    }
+    setTimeout(tick, del ? 45 : 75);
+  }
+  tick();
+
+  // Scroll fade-in
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 80);
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
