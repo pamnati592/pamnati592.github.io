@@ -428,21 +428,22 @@
       <div>
         <span class="badge badge-live">⬤ Live in Production</span>
         <div class="proj-name">AI Technical Support Bot</div>
-        <p class="proj-desc">RAG-based internal chatbot deployed at Keshet Digital. Pulls from the company knowledge base using vector search, streams answers token-by-token, analyzes error screenshots, generates shift summaries, and tracks incidents automatically.</p>
+        <p class="proj-desc">RAG-based internal chatbot powered by GPT-4o and ChromaDB. Pulls from a company knowledge base using vector search, streams answers token-by-token, and analyzes error screenshots. When no exact answer is found, suggests the 3 closest topics by similarity — the user picks by number and gets the full answer. Includes a built-in IP Monitor (Playwright + headless Chromium) that checks network devices every 10 minutes and sends email alerts on failures. Generates structured shift summaries and tracks incidents automatically. Ships as a portable Windows EXE.</p>
         <a href="https://github.com/pamnati592/AI_technical_support_bot" target="_blank" class="proj-link">View on GitHub →</a>
       </div>
       <div>
         <div class="tags">
           <span class="tag">Python</span>
           <span class="tag">FastAPI</span>
-          <span class="tag">Google Gemini</span>
+          <span class="tag">OpenAI GPT-4o</span>
           <span class="tag">ChromaDB</span>
+          <span class="tag">Playwright</span>
           <span class="tag">SSE Streaming</span>
           <span class="tag">RAG</span>
-          <span class="tag">BookStack</span>
+          <span class="tag">PyInstaller</span>
         </div>
         <div class="featured-note">
-          Also built an <strong>AI Slack Bot for content editors</strong> at Keshet Digital — same RAG architecture, separate deployment, in active daily use by the editorial team.
+          Also built an <strong>AI Slack Bot for content editors</strong> — same RAG architecture, separate deployment, in active daily use by the editorial team.
         </div>
       </div>
     </div>
@@ -592,7 +593,7 @@
       <div class="tl-company">Keshet Digital</div>
       <div class="tl-role">NOC & Technical Support Engineer</div>
       <ul class="tl-desc">
-        <li>Designed and deployed an AI-powered RAG chatbot (Gemini, ChromaDB, FastAPI) — replaced manual knowledge retrieval, in active production use</li>
+        <li>Designed and deployed an AI-powered RAG chatbot (GPT-4o, ChromaDB, FastAPI) with smart topic suggestions, 24/7 IP monitoring via Playwright, automated email alerts, and a portable Windows EXE build — in active production use</li>
         <li>Built and shipped a Slack Bot for the editorial team, automating content workflows end-to-end</li>
         <li>Monitor production servers (Linux & Windows), perform root cause analysis, and drive stability improvements with development teams</li>
       </ul>
